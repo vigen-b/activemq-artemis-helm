@@ -26,6 +26,11 @@ data:
           {{end}}
         </connectors>
 
+        <!-- Acceptors -->
+        <acceptors>
+          <acceptor name="netty">tcp://0.0.0.0:61616</acceptor>
+        </acceptors>
+
 
         <cluster-connections>
           <cluster-connection name="{{ $releaseName }}">
