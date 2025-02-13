@@ -116,9 +116,9 @@ $ helm install --name my-release -f values.yaml activemq-artemis
 
 ## 7. Persistence
 
-The ActiveMQ Artemis image stores the broker data in `/var/lib/artemis/data` and configurations at the `/var/lib/artemis/etc` path of the container.
+The ActiveMQ Artemis image stores the broker data in `/var/lib/artemis-instance/data` and configurations at the `/var/lib/artemis-instance/etc` path of the container.
 
-By default a PersistentVolumeClaim is created and mounted into the `/var/lib/artemis/data`. In order to disable this functionality
+By default a PersistentVolumeClaim is created and mounted into the `/var/lib/artemis-instance/data`. In order to disable this functionality
 you can change the values.yaml to disable persistence and use an emptyDir instead.
 
 > *"An emptyDir volume is first created when a Pod is assigned to a Node, and exists as long as that Pod is running on that node. When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever."*

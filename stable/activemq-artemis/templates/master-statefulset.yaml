@@ -56,7 +56,7 @@ spec:
         command: ["/bin/sh", "/opt/configure-master/configure-cluster.sh"]
         volumeMounts:
           - name: config-override
-            mountPath: /var/lib/artemis/etc-override
+            mountPath: /var/lib/artemis-instance/etc-override
           - name: configure-common
             mountPath: /opt/configure-common
           - name: configure-master
@@ -100,9 +100,9 @@ spec:
           periodSeconds: 10
         volumeMounts:
         - name: data
-          mountPath: /var/lib/artemis/data
+          mountPath: /var/lib/artemis-instance/data
         - name: config-override
-          mountPath: /var/lib/artemis/etc-override
+          mountPath: /var/lib/artemis-instance/etc-override
         - name: configure-common
           mountPath: /opt/configure-common
         - name: configure-master
