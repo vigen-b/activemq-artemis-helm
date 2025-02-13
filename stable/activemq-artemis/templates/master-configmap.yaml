@@ -6,22 +6,6 @@ metadata:
 {{ include "artemis.labels.standard" . | indent 4 }}
 data:
 
-  template-master.xml: |
-    <configuration xmlns="urn:activemq" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd">
-      <core xmlns="urn:activemq:core" xsi:schemaLocation="urn:activemq:core ">
-
-        <ha-policy>
-          <replication>
-            <master>
-              <group-name>to-be-set-by-configure-cluster.sh</group-name>
-              <!--we need this for auto failback-->
-              <check-for-live-server>false</check-for-live-server>
-            </master>
-          </replication>
-        </ha-policy>
-      </core>
-    </configuration>
-
 
   template-master-ha.xml: |
     <ha-policy xmlns="urn:activemq:core">
@@ -29,7 +13,7 @@ data:
             <master>
                 <group-name>to-be-set-by-configure-cluster.sh</group-name>
                 <!--we need this for auto failback-->
-                <check-for-live-server>false</check-for-live-server>
+                <check-for-live-server>true</check-for-live-server>
             </master>
         </replication>
     </ha-policy>
@@ -45,7 +29,6 @@ data:
     cp /opt/configure-common/template-common.xml /var/lib/artemis-instance/etc-override/broker.xml
 
     echo Assigning node as master
-    # cp /opt/configure-master/template-master.xml /var/lib/artemis-instance/etc-override/broker-11.xml
     cp /opt/configure-master/template-master-ha.xml /var/lib/artemis-instance/etc-override/broker-ha.xml
 
     GROUPNAME=$(echo ${HOSTNAME} | sed -re 's/(-slave|-master)//')

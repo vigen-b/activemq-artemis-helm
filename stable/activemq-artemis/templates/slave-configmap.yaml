@@ -6,24 +6,14 @@ metadata:
 {{ include "artemis.labels.standard" . | indent 4 }}
 data:
 
-  template-slave.xml: |
-    <configuration xmlns="urn:activemq" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd">
-      <core xmlns="urn:activemq:core" xsi:schemaLocation="urn:activemq:core ">
-         <ha-policy>
-          <replication>
-            <slave>
-              <group-name>to-be-set-by-configure-cluster.sh</group-name>
-            </slave>
-          </replication>
-        </ha-policy>
-      </core>
-    </configuration>
-
   template-slave-ha.xml: |
     <ha-policy xmlns="urn:activemq:core">
         <replication>
             <slave>
                 <group-name>to-be-set-by-configure-cluster.sh</group-name>
+                <allow-failback>true</allow-failback>
+                <!-- not needed but tells the backup not to restart after failback as there will be > 0 backups saved -->
+                <max-saved-replicated-journals-size>0</max-saved-replicated-journals-size>
             </slave>
         </replication>
     </ha-policy>
@@ -41,7 +31,6 @@ data:
     cp /opt/configure-common/template-common.xml /var/lib/artemis-instance/etc-override/broker.xml
 
     echo Assigning node as slave
-    # cp /opt/configure-slave/template-slave.xml /var/lib/artemis-instance/etc-override/broker-11.xml
     cp /opt/configure-slave/template-slave-ha.xml /var/lib/artemis-instance/etc-override/broker-ha.xml
 
     GROUPNAME=$(echo ${HOSTNAME} | sed -re 's/(-slave|-master)//')
