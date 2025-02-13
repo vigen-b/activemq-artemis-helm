@@ -26,15 +26,6 @@ data:
           {{end}}
         </connectors>
 
-        <!-- Acceptors -->
-        <acceptors>
-          {{ range $i,$t := until (int .Values.replicas) }}
-          {{ range tuple "master" "slave" }}
-              <acceptor name="{{ $fullname }}-{{ . }}-{{ $i }}">tcp://{{ $fullname }}-{{ . }}-{{ $i }}.{{ $releaseName }}-{{ . }}.{{ $releaseNamespace }}.svc.cluster.local:61616</acceptor>
-          {{ end }}
-          {{end}}
-        </acceptors>
-
 
         <cluster-connections>
           <cluster-connection name="{{ $releaseName }}">
