@@ -50,7 +50,7 @@ data:
          </cluster-connection>
        </cluster-connections>
 
-        <xi:include href="broker-ha.xml"/>
+        <xi:include href="/var/lib/artemis-instance/etc/broker-ha.xml"/>
       </core>
     </configuration>
 
