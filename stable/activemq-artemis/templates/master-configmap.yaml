@@ -46,7 +46,7 @@ data:
 
     echo Assigning node as master
     # cp /opt/configure-master/template-master.xml /var/lib/artemis-instance/etc-override/broker-11.xml
-    cp /opt/configure-master/template-master.xml /var/lib/artemis-instance/etc-override/broker-ha.xml
+    cp /opt/configure-master/template-master-ha.xml /var/lib/artemis-instance/etc-override/broker-ha.xml
 
     GROUPNAME=$(echo ${HOSTNAME} | sed -re 's/(-slave|-master)//')
     echo Setting the group-name for slave to ${GROUPNAME}
