@@ -10,11 +10,11 @@ data:
   template-master-ha.xml: |
     <ha-policy xmlns="urn:activemq:core">
         <replication>
-            <master>
+            <primary>
                 <group-name>to-be-set-by-configure-cluster.sh</group-name>
                 <!--we need this for auto failback-->
                 <check-for-live-server>true</check-for-live-server>
-            </master>
+            </primary>
         </replication>
     </ha-policy>
 

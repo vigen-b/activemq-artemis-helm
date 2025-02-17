@@ -9,12 +9,13 @@ data:
   template-slave-ha.xml: |
     <ha-policy xmlns="urn:activemq:core">
         <replication>
-            <slave>
+            <backup>
                 <group-name>to-be-set-by-configure-cluster.sh</group-name>
                 <allow-failback>true</allow-failback>
+                <failback-delay>5000</failback-delay>
                 <!-- not needed but tells the backup not to restart after failback as there will be > 0 backups saved -->
                 <max-saved-replicated-journals-size>0</max-saved-replicated-journals-size>
-            </slave>
+            </backup>
         </replication>
     </ha-policy>
 
