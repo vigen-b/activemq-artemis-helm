@@ -10,7 +10,7 @@ data:
     <ha-policy xmlns="urn:activemq:core">
         <replication>
             <slave>
-                <group-name>to-be-set-by-configure-cluster.sh</group-name>
+    <!--            <group-name>to-be-set-by-configure-cluster.sh</group-name>-->
                 <allow-failback>true</allow-failback>
                 <!-- not needed but tells the backup not to restart after failback as there will be > 0 backups saved -->
                 <max-saved-replicated-journals-size>0</max-saved-replicated-journals-size>
@@ -33,12 +33,12 @@ data:
     echo Assigning node as slave
     cp /opt/configure-slave/template-slave-ha.xml /var/lib/artemis-instance/etc-override/broker-ha.xml
 
-    GROUPNAME=$(echo ${HOSTNAME} | sed -re 's/(-slave|-master)//')
-    echo Setting the group-name for slave to ${GROUPNAME}
-    xmlstarlet ed -L \
-    -N core="urn:activemq:core" \
-    -u "/core:ha-policy/core:replication/core:slave/core:group-name" \
-    -v "${GROUPNAME}" /var/lib/artemis-instance/etc-override/broker-ha.xml
+{{/*    GROUPNAME=$(echo ${HOSTNAME} | sed -re 's/(-slave|-master)//')*/}}
+{{/*    echo Setting the group-name for slave to ${GROUPNAME}*/}}
+{{/*    xmlstarlet ed -L \*/}}
+{{/*    -N core="urn:activemq:core" \*/}}
+{{/*    -u "/core:ha-policy/core:replication/core:slave/core:group-name" \*/}}
+{{/*    -v "${GROUPNAME}" /var/lib/artemis-instance/etc-override/broker-ha.xml*/}}
 
     echo Setting the connector-ref to ${HOSTNAME}
     xmlstarlet ed -L \

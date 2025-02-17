@@ -11,7 +11,7 @@ data:
     <ha-policy xmlns="urn:activemq:core">
         <replication>
             <master>
-                <group-name>to-be-set-by-configure-cluster.sh</group-name>
+    <!--            <group-name>to-be-set-by-configure-cluster.sh</group-name>-->
                 <!--we need this for auto failback-->
                 <check-for-live-server>true</check-for-live-server>
             </master>
@@ -31,12 +31,12 @@ data:
     echo Assigning node as master
     cp /opt/configure-master/template-master-ha.xml /var/lib/artemis-instance/etc-override/broker-ha.xml
 
-    GROUPNAME=$(echo ${HOSTNAME} | sed -re 's/(-slave|-master)//')
-    echo Setting the group-name for slave to ${GROUPNAME}
-    xmlstarlet ed -L \
-    -N core="urn:activemq:core" \
-    -u "/core:ha-policy/core:replication/core:master/core:group-name" \
-    -v "${GROUPNAME}" /var/lib/artemis-instance/etc-override/broker-ha.xml
+{{/*    GROUPNAME=$(echo ${HOSTNAME} | sed -re 's/(-slave|-master)//')*/}}
+{{/*    echo Setting the group-name for slave to ${GROUPNAME}*/}}
+{{/*    xmlstarlet ed -L \*/}}
+{{/*    -N core="urn:activemq:core" \*/}}
+{{/*    -u "/core:ha-policy/core:replication/core:master/core:group-name" \*/}}
+{{/*    -v "${GROUPNAME}" /var/lib/artemis-instance/etc-override/broker-ha.xml*/}}
 
     echo Setting the connector-ref to ${HOSTNAME}
           xmlstarlet ed -L \
