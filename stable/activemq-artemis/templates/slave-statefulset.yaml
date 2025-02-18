@@ -75,7 +75,7 @@ spec:
           periodSeconds: 10
         readinessProbe:
           tcpSocket:
-            port: core
+            port: http
           initialDelaySeconds: 10
           periodSeconds: 10
         volumeMounts:
