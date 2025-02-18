@@ -52,8 +52,27 @@ data:
             {{ end }}
             </static-connectors>
 
-         </cluster-connection>
-       </cluster-connections>
+          </cluster-connection>
+        </cluster-connections>
+        <security-settings>
+            <!--security for example queue-->
+            <security-setting match="exampleQueue">
+                <permission roles="guest" type="createDurableQueue"/>
+                <permission roles="guest" type="deleteDurableQueue"/>
+                <permission roles="guest" type="createNonDurableQueue"/>
+                <permission roles="guest" type="deleteNonDurableQueue"/>
+                <permission roles="guest" type="consume"/>
+                <permission roles="guest" type="send"/>
+            </security-setting>
+        </security-settings>
+
+        <addresses>
+            <address name="exampleQueue">
+                <anycast>
+                    <queue name="exampleQueue"/>
+                </anycast>
+            </address>
+        </addresses>
 
         <xi:include href="etc/broker-ha.xml"/>
       </core>
