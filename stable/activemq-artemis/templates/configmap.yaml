@@ -84,14 +84,6 @@ data:
         </cluster-connections>
         <security-settings>
             <!--security for example queue-->
-            <security-setting match="exampleQueue">
-                <permission roles="guest" type="createDurableQueue"/>
-                <permission roles="guest" type="deleteDurableQueue"/>
-                <permission roles="guest" type="createNonDurableQueue"/>
-                <permission roles="guest" type="deleteNonDurableQueue"/>
-                <permission roles="guest" type="consume"/>
-                <permission roles="guest" type="send"/>
-            </security-setting>
             <security-setting match="#">
                 <permission roles="amq" type="createNonDurableQueue"/>
                 <permission roles="amq" type="deleteNonDurableQueue"/>
