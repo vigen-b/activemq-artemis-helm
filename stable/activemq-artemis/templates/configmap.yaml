@@ -64,6 +64,19 @@ data:
                 <permission roles="guest" type="consume"/>
                 <permission roles="guest" type="send"/>
             </security-setting>
+            <security-setting match="#">
+                <permission roles="amq" type="createNonDurableQueue"/>
+                <permission roles="amq" type="deleteNonDurableQueue"/>
+                <permission roles="amq" type="createDurableQueue"/>
+                <permission roles="amq" type="deleteDurableQueue"/>
+                <permission roles="amq" type="createAddress"/>
+                <permission roles="amq" type="deleteAddress"/>
+                <permission roles="amq" type="consume"/>
+                <permission roles="amq" type="browse"/>
+                <permission roles="amq" type="send"/>
+                <!-- we need this otherwise ./artemis data imp wouldn't work -->
+                <permission roles="amq" type="manage"/>
+            </security-setting>
         </security-settings>
 
         <addresses>
