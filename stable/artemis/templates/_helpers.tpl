@@ -189,9 +189,9 @@ containers:
   - name: data
     mountPath: /var/lib/artemis-instance/data
   - name: etc-override
-    mountPath: /var/lib/artemis/etc-override
+    mountPath: /var/lib/artemis-instance/etc-override
   - name: jgroups
-    mountPath: /var/lib/artemis/jgroups
+    mountPath: /var/lib/artemis-instance/jgroups
   - name: artemis-users
     mountPath: /var/lib/artemis-instance/etc-override/artemis-users.properties
     subPath: artemis-users.properties
@@ -252,8 +252,6 @@ volumes:
       path: discovery.xml
     - key: broker-00.xslt
       path: broker.xslt
-    - key: jgroups-discovery.xml
-      path: jgroups-discovery.xml
 {{- end -}}
 
 {{- define "artemis.statefulset.volumeclaim" -}}
