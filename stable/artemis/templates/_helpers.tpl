@@ -185,16 +185,16 @@ containers:
   {{- end }}
   volumeMounts:
   - name: data
-    mountPath: /var/lib/artemis-instance/data
+    mountPath: /var/lib/artemis/data
   - name: etc-override
-    mountPath: /var/lib/artemis-instance/etc-override
+    mountPath: /var/lib/artemis/etc-override
   - name: jgroups
-    mountPath: /var/lib/artemis-instance/etc/jgroups
+    mountPath: /var/lib/artemis/etc/jgroups
   - name: artemis-users
-    mountPath: /var/lib/artemis-instance/etc/artemis-users.properties
+    mountPath: /var/lib/artemis/etc/artemis-users.properties
     subPath: artemis-users.properties
   - name: artemis-users
-    mountPath: /var/lib/artemis-instance/etc/artemis-roles.properties
+    mountPath: /var/lib/artemis/etc/artemis-roles.properties
     subPath: artemis-roles.properties
 serviceAccount: {{ include "artemis.fullname" . }}
 {{- if .Values.podSecurityContext }}
