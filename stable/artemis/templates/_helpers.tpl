@@ -252,6 +252,8 @@ volumes:
       path: discovery.xml
     - key: broker-00.xslt
       path: broker.xslt
+    - key: jgroups-discovery.xml
+      path: jgroups-discovery.xml
 {{- end -}}
 
 {{- define "artemis.statefulset.volumeclaim" -}}
