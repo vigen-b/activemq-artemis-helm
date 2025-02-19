@@ -77,7 +77,9 @@ initContainers:
     - bash
   args:
     - -c
-    - cp /tmp/config/*.{xml,xslt} /tmp/etc-override/
+    - |
+      cp /tmp/config/*.{xml,xslt} /tmp/etc-override/
+      chown -R 1000:1000 /tmp/etc-override/
   volumeMounts:
   - name: config
     mountPath: /tmp/config
@@ -189,7 +191,7 @@ containers:
   - name: etc-override
     mountPath: /var/lib/artemis/etc-override
   - name: jgroups
-    mountPath: /var/lib/artemis-instance/jgroups
+    mountPath: /var/lib/artemis/jgroups
   - name: artemis-users
     mountPath: /var/lib/artemis-instance/etc-override/artemis-users.properties
     subPath: artemis-users.properties
