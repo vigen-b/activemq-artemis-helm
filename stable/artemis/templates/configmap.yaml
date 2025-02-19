@@ -56,18 +56,18 @@ data:
     <configuration xmlns="urn:activemq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd" xmlns:xi="http://www.w3.org/2001/XInclude">
       <core xmlns="urn:activemq:core" xsi:schemaLocation="urn:activemq:core ">
 
-        <xi:include href="../etc-override/connectors.xml"/>
+        <xi:include href="etc/connectors.xml"/>
 
         <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
-        <xi:include href="../etc-override/clustering.xml" />
+        <xi:include href="etc/clustering.xml" />
 
-        <xi:include href="../etc-override/broadcast.xml"/>
-        <xi:include href="../etc-override/discovery.xml"/>
+        <xi:include href="etc/broadcast.xml"/>
+        <xi:include href="etc/discovery.xml"/>
 
-        <xi:include href="../etc-override/addresses.xml"/>
-        <xi:include href="../etc-override/address-settings.xml" />
+        <xi:include href="etc/addresses.xml"/>
+        <xi:include href="etc/address-settings.xml" />
 
-        <xi:include href="../etc-override/ha-backup.xml" />
+        <xi:include href="etc/ha-backup.xml" />
 
         {{- range $key, $value := .Values.core }}
         <{{ kebabcase $key }}>{{ $value }}</{{ kebabcase $key }}>

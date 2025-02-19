@@ -185,16 +185,16 @@ containers:
   {{- end }}
   volumeMounts:
   - name: data
-    mountPath: /var/lib/artemis/data
+    mountPath: /var/lib/artemis-instance/data
   - name: etc-override
-    mountPath: /var/lib/artemis/etc-override
+    mountPath: /var/lib/artemis-instance/etc-override
   - name: jgroups
-    mountPath: /var/lib/artemis/etc/jgroups
+    mountPath: /var/lib/artemis-instance/etc-override/jgroups
   - name: artemis-users
-    mountPath: /var/lib/artemis/etc/artemis-users.properties
+    mountPath: /var/lib/artemis-instance/etc-override/artemis-users.properties
     subPath: artemis-users.properties
   - name: artemis-users
-    mountPath: /var/lib/artemis/etc/artemis-roles.properties
+    mountPath: /var/lib/artemis-instance/etc-override/artemis-roles.properties
     subPath: artemis-roles.properties
 serviceAccount: {{ include "artemis.fullname" . }}
 {{- if .Values.podSecurityContext }}
@@ -249,7 +249,7 @@ volumes:
     - key: discovery.xml
       path: discovery.xml
     - key: broker-00.xslt
-      path: broker-00.xslt
+      path: broker.xslt
 {{- end -}}
 
 {{- define "artemis.statefulset.volumeclaim" -}}
