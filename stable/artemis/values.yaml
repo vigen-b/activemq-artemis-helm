@@ -14,10 +14,10 @@ initContainerImage:
 
 resources:
   limits:
-    memory: 256Mi
+    memory: 512Mi
   requests:
-    cpu: 100m
-    memory: 256Mi
+    cpu: 300m
+    memory: 512Mi
 
 # javaOpts additional java options
 javaOpts: ""
