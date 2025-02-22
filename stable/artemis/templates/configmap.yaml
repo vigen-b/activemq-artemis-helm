@@ -16,11 +16,11 @@ data:
         <xi:include href="etc/addresses.xml"/>
         <xi:include href="etc/address-settings.xml" />
 
-    <!--    <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>-->
-    <!--    <xi:include href="etc/clustering.xml" />-->
+        <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
+        <xi:include href="etc/clustering.xml" />
 
-    <!--    <xi:include href="etc/broadcast.xml"/>-->
-    <!--    <xi:include href="etc/discovery.xml"/>-->
+        <xi:include href="etc/broadcast.xml"/>
+        <xi:include href="etc/discovery.xml"/>
 
         {{- range $key, $value := .Values.core }}
         <{{ kebabcase $key }}>{{ $value }}</{{ kebabcase $key }}>
@@ -35,11 +35,11 @@ data:
 
         <xi:include href="etc/connectors.xml"/>
 
-    <!--    <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>-->
-    <!--    <xi:include href="etc/clustering.xml" />-->
+        <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
+        <xi:include href="etc/clustering.xml" />
 
-    <!--    <xi:include href="etc/broadcast.xml"/>-->
-    <!--    <xi:include href="etc/discovery.xml"/>-->
+        <xi:include href="etc/broadcast.xml"/>
+        <xi:include href="etc/discovery.xml"/>
 
         <xi:include href="etc/addresses.xml"/>
         <xi:include href="etc/address-settings.xml" />
@@ -59,11 +59,11 @@ data:
 
         <xi:include href="etc/connectors.xml"/>
 
-    <!--    <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>-->
-    <!--    <xi:include href="etc/clustering.xml" />-->
+        <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
+        <xi:include href="etc/clustering.xml" />
 
-    <!--    <xi:include href="etc/broadcast.xml"/>-->
-    <!--    <xi:include href="etc/discovery.xml"/>-->
+        <xi:include href="etc/broadcast.xml"/>
+        <xi:include href="etc/discovery.xml"/>
 
         <xi:include href="etc/addresses.xml"/>
         <xi:include href="etc/address-settings.xml" />
@@ -96,7 +96,7 @@ data:
   broadcast.xml: |
     <broadcast-groups xmlns="urn:activemq:core">
       <broadcast-group name="jgroups-broadcast">
-        <jgroups-file>/var/lib/artemis-instance/etc/jgroups-discovery.xml</jgroups-file>
+        <jgroups-file>/var/lib/artemis-instance/jgroups/..data/jgroups-discovery.xml</jgroups-file>
         <jgroups-channel>activemq_broadcast_channel</jgroups-channel>
         <connector-ref>netty</connector-ref>
       </broadcast-group>
@@ -105,7 +105,7 @@ data:
   discovery.xml: |
     <discovery-groups  xmlns="urn:activemq:core" >
       <discovery-group name="jgroups-discovery">
-          <jgroups-file>/var/lib/artemis-instance/etc/jgroups-discovery.xml</jgroups-file>
+          <jgroups-file>/var/lib/artemis-instance/jgroups/..data/jgroups-discovery.xml</jgroups-file>
           <jgroups-channel>activemq_broadcast_channel</jgroups-channel>
           <refresh-timeout>10000</refresh-timeout>
       </discovery-group>
