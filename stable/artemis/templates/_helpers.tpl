@@ -79,7 +79,7 @@ initContainers:
     - -c
     - |
       cp /tmp/config/*.{xml,xslt} /tmp/etc-override/
-      cp /tmp/jgroups/*.{xml,xslt} /tmp/etc-override/
+      cp /tmp/jgroups/*.xml /tmp/etc-override/
       chown -R 1001:1001 /tmp/etc-override/
       chown -R 1001:1001 /tmp/data/
   volumeMounts:
@@ -89,7 +89,7 @@ initContainers:
     mountPath: /tmp/etc-override
   - name: data
     mountPath: /tmp/data
-  - name: data
+  - name: jgroups
     mountPath: /tmp/jgroups
 - name: set-pod-ip
   image: {{ .Values.initContainerImage.repository }}:{{ .Values.initContainerImage.tag }}
