@@ -79,7 +79,7 @@ initContainers:
     - -c
     - |
       cp /tmp/config/*.{xml,xslt} /tmp/etc-override/
-      cp /tmp/jgroups/*.xml /tmp/etc-override/
+{{/*      cp /tmp/jgroups/*.xml /tmp/etc-override/*/}}
       chown -R 1001:1001 /tmp/etc-override/
       chown -R 1001:1001 /tmp/data/
   volumeMounts:
