@@ -79,6 +79,7 @@ initContainers:
     - -c
     - |
       cp /tmp/config/*.{xml,xslt} /tmp/etc-override/
+      cp /tmp/jgroups/*.{xml,xslt} /tmp/etc-override/
       chown -R 1001:1001 /tmp/etc-override/
       chown -R 1001:1001 /tmp/data/
   volumeMounts:
@@ -88,6 +89,8 @@ initContainers:
     mountPath: /tmp/etc-override
   - name: data
     mountPath: /tmp/data
+  - name: data
+    mountPath: /tmp/jgroups
 - name: set-pod-ip
   image: {{ .Values.initContainerImage.repository }}:{{ .Values.initContainerImage.tag }}
   imagePullPolicy: {{ .Values.initContainerImage.pullPolicy}}
@@ -193,8 +196,8 @@ containers:
     mountPath: /var/lib/artemis-instance/data
   - name: etc-override
     mountPath: /var/lib/artemis-instance/etc-override
-  - name: jgroups
-    mountPath: /var/lib/artemis-instance/jgroups
+{{/*  - name: jgroups*/}}
+{{/*    mountPath: /var/lib/artemis-instance/jgroups*/}}
   - name: artemis-users
     mountPath: /var/lib/artemis-instance/etc-override/artemis-users.properties
     subPath: artemis-users.properties
