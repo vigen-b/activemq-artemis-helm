@@ -187,6 +187,10 @@ containers:
             key: clusterPassword
     - name: ENABLE_JMX_EXPORTER
       value: {{ .Values.metrics.enabled | quote }}
+    - name: ROOT_UTILITY_LOGGER_LEVEL
+      value: INFO
+    - name: ROOT_LOGGER_LEVEL
+      value: TRACE
   {{- if .Values.containerSecurityContext }}
   securityContext:
     {{- toYaml .Values.containerSecurityContext | nindent 10 }}
