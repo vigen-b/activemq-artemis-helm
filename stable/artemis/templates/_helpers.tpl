@@ -248,6 +248,8 @@ volumes:
   configMap:
     name: {{ include "artemis.fullname" . }}
     items:
+    - key: acceptors.xml
+      path: acceptors.xml
     - key: addresses.xml
       path: addresses.xml
     - key: address-settings.xml
