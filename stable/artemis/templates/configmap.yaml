@@ -16,7 +16,7 @@ data:
 
         <xi:include href="etc/addresses.xml"/>
         <xi:include href="etc/address-settings.xml" />
-        <xi:include href="etc/security-settings.xml" />
+    <!--    <xi:include href="etc/security-settings.xml" />-->
         <xi:include href="etc/broker-plugins.xml" />
 
         <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
@@ -47,7 +47,7 @@ data:
 
         <xi:include href="etc/addresses.xml"/>
         <xi:include href="etc/address-settings.xml" />
-        <xi:include href="etc/security-settings.xml" />
+    <!--    <xi:include href="etc/security-settings.xml" />-->
         <xi:include href="etc/broker-plugins.xml" />
 
         <xi:include href="etc/ha-live.xml" />
@@ -74,7 +74,7 @@ data:
 
         <xi:include href="etc/addresses.xml"/>
         <xi:include href="etc/address-settings.xml" />
-        <xi:include href="etc/security-settings.xml" />
+    <!--    <xi:include href="etc/security-settings.xml" />-->
         <xi:include href="etc/broker-plugins.xml" />
 
         <xi:include href="etc/ha-backup.xml" />
