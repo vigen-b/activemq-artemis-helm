@@ -242,12 +242,15 @@ data:
     <security-settings  xmlns="urn:activemq:core">
       <!--security for example queue-->
       <security-setting match="#">
+        <permission roles="amq" type="createAddress"/>
+        <permission roles="amq" type="deleteAddress"/>
         <permission roles="amq" type="createDurableQueue"/>
         <permission roles="amq" type="deleteDurableQueue"/>
         <permission roles="amq" type="createNonDurableQueue"/>
         <permission roles="amq" type="deleteNonDurableQueue"/>
         <permission roles="amq" type="consume"/>
         <permission roles="amq" type="send"/>
+        <permission roles="amq" type="browse"/>
       </security-setting>
     </security-settings>
 
