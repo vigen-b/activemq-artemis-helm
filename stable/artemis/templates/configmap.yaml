@@ -16,11 +16,11 @@ data:
         <xi:include href="etc/addresses.xml"/>
         <xi:include href="etc/address-settings.xml" />
 
-    <!--    <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>-->
-    <!--    <xi:include href="etc/clustering.xml" />-->
+        <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
+        <xi:include href="etc/clustering.xml" />
 
-    <!--    <xi:include href="etc/broadcast.xml"/>-->
-    <!--    <xi:include href="etc/discovery.xml"/>-->
+        <xi:include href="etc/broadcast.xml"/>
+        <xi:include href="etc/discovery.xml"/>
 
         {{- range $key, $value := .Values.core }}
         <{{ kebabcase $key }}>{{ $value }}</{{ kebabcase $key }}>
