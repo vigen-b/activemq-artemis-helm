@@ -256,12 +256,16 @@ volumes:
       path: address-settings.xml
     - key: broadcast.xml
       path: broadcast.xml
+    - key: broker-plugins.xml
+      path: broker-plugins.xml
     - key: clustering.xml
       path: clustering.xml
     - key: connectors.xml
       path: connectors.xml
     - key: discovery.xml
       path: discovery.xml
+    - key: security-settings.xml
+      path: security-settings.xml
     - key: broker-00.xslt
       path: broker.xslt
 {{- end -}}

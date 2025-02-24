@@ -16,6 +16,8 @@ data:
 
         <xi:include href="etc/addresses.xml"/>
         <xi:include href="etc/address-settings.xml" />
+        <xi:include href="etc/security-settings.xml" />
+        <xi:include href="etc/broker-plugins.xml" />
 
         <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
         <xi:include href="etc/clustering.xml" />
@@ -26,18 +28,6 @@ data:
         {{- range $key, $value := .Values.core }}
         <{{ kebabcase $key }}>{{ $value }}</{{ kebabcase $key }}>
         {{- end }}
-        <broker-plugins>
-          <broker-plugin class-name="org.apache.activemq.artemis.core.server.plugin.impl.LoggingActiveMQServerPlugin">
-            <property key="LOG_ALL_EVENTS" value="true"/>
-            <property key="LOG_CONNECTION_EVENTS" value="true"/>
-            <property key="LOG_SESSION_EVENTS" value="true"/>
-            <property key="LOG_CONSUMER_EVENTS" value="true"/>
-            <property key="LOG_DELIVERING_EVENTS" value="true"/>
-            <property key="LOG_SENDING_EVENTS" value="true"/>
-            <property key="LOG_INTERNAL_EVENTS" value="true"/>
-          </broker-plugin>
-        </broker-plugins>
-
       </core>
     </configuration>
 
@@ -57,6 +47,8 @@ data:
 
         <xi:include href="etc/addresses.xml"/>
         <xi:include href="etc/address-settings.xml" />
+        <xi:include href="etc/security-settings.xml" />
+        <xi:include href="etc/broker-plugins.xml" />
 
         <xi:include href="etc/ha-live.xml" />
 
@@ -82,6 +74,8 @@ data:
 
         <xi:include href="etc/addresses.xml"/>
         <xi:include href="etc/address-settings.xml" />
+        <xi:include href="etc/security-settings.xml" />
+        <xi:include href="etc/broker-plugins.xml" />
 
         <xi:include href="etc/ha-backup.xml" />
 
@@ -243,6 +237,32 @@ data:
        </address-setting>
     {{- end }}
     </address-settings>
+
+  security-settings.xml: |
+    <security-settings  xmlns="urn:activemq:core">
+      <!--security for example queue-->
+      <security-setting match="exampleQueue">
+        <permission roles="amq" type="createDurableQueue"/>
+        <permission roles="amq" type="deleteDurableQueue"/>
+        <permission roles="amq" type="createNonDurableQueue"/>
+        <permission roles="amq" type="deleteNonDurableQueue"/>
+        <permission roles="amq" type="consume"/>
+        <permission roles="amq" type="send"/>
+      </security-setting>
+    </security-settings>
+
+  broker-plugins.xml: |
+    <broker-plugins xmlns="urn:activemq:core">
+        <broker-plugin class-name="org.apache.activemq.artemis.core.server.plugin.impl.LoggingActiveMQServerPlugin">
+            <property key="LOG_ALL_EVENTS" value="true"/>
+            <property key="LOG_CONNECTION_EVENTS" value="true"/>
+            <property key="LOG_SESSION_EVENTS" value="true"/>
+            <property key="LOG_CONSUMER_EVENTS" value="true"/>
+            <property key="LOG_DELIVERING_EVENTS" value="true"/>
+            <property key="LOG_SENDING_EVENTS" value="true"/>
+            <property key="LOG_INTERNAL_EVENTS" value="true"/>
+        </broker-plugin>
+    </broker-plugins>
 
   ha-live.xml: |
     <ha-policy xmlns="urn:activemq:core">
