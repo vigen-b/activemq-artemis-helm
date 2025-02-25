@@ -84,6 +84,53 @@ core:
   ## core.criticalAnalyzerPolicy how to behave on critical errors detected, see https://activemq.apache.org/components/artemis/documentation/latest/critical-analysis.html
   criticalAnalyzerPolicy: SHUTDOWN
 
+acceptors:
+  artemis:
+    url: "tcp://0.0.0.0:61616"
+    configs:
+      tcpSendBufferSize: "1048576"
+      tcpReceiveBufferSize: "1048576"
+      amqpMinLargeMessageSize: "102400"
+      protocols: "CORE,AMQP,STOMP,HORNETQ,MQTT,OPENWIRE"
+      useEpoll: true
+      amqpCredits: "1000"
+      amqpLowCredits: "300"
+      amqpDuplicateDetection: true
+      supportAdvisory: false
+      suppressInternalManagementObjects: false
+  amqp:
+    url: "tcp://0.0.0.0:5672"
+    configs:
+      tcpSendBufferSize: "1048576"
+      tcpReceiveBufferSize: "1048576"
+      amqpMinLargeMessageSize: "102400"
+      protocols: "AMQP"
+      useEpoll: true
+      amqpCredits: "1000"
+      amqpLowCredits: "300"
+      amqpDuplicateDetection: true
+  stomp:
+    url: "tcp://0.0.0.0:61613"
+    configs:
+      tcpSendBufferSize: "1048576"
+      tcpReceiveBufferSize: "1048576"
+      protocols: "STOMP"
+      useEpoll: true
+  hornetq:
+    url: "tcp://0.0.0.0:5445"
+    configs:
+      anycastPrefix: jms.queue.
+      multicastPrefix: jms.topic.
+      protocols: "HORNETQ,STOMP"
+      useEpoll: true
+  mqtt:
+    url: "tcp://0.0.0.0:1883"
+    configs:
+      tcpSendBufferSize: "1048576"
+      tcpReceiveBufferSize: "1048576"
+      protocols: "MQTT"
+      useEpoll: true
+
 addresses:
   - name: DLQ
   - name: ExpiryQueue
@@ -94,6 +141,20 @@ addressSettings:
       deadLetterAddress: DLQ
       expiryAddress: ExpiryQueue
       messageCounterHistoryDayLimit: 10
+
+securitySettings:
+  - match: '#'
+    permissions:
+      amq:
+        - createAddress
+        - deleteAddress
+        - createDurableQueue
+        - deleteDurableQueue
+        - createNonDurableQueue
+        - deleteNonDurableQueue
+        - consume
+        - send
+        - browse
 
 ## users defines the Artemis users required by other applications.
 # users:

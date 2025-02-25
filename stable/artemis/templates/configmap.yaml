@@ -14,16 +14,16 @@ data:
         <xi:include href="etc/connectors.xml"/>
         <xi:include href="etc/acceptors.xml"/>
 
-        <xi:include href="etc/addresses.xml"/>
-        <xi:include href="etc/address-settings.xml" />
-        <xi:include href="etc/security-settings.xml" />
-        <xi:include href="etc/broker-plugins.xml" />
-
         <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
         <xi:include href="etc/clustering.xml" />
 
         <xi:include href="etc/broadcast.xml"/>
         <xi:include href="etc/discovery.xml"/>
+
+        <xi:include href="etc/addresses.xml"/>
+        <xi:include href="etc/address-settings.xml" />
+        <xi:include href="etc/security-settings.xml" />
+        <xi:include href="etc/broker-plugins.xml" />
 
         {{- range $key, $value := .Values.core }}
         <{{ kebabcase $key }}>{{ $value }}</{{ kebabcase $key }}>
@@ -92,27 +92,15 @@ data:
 
   acceptors.xml: |
     <acceptors xmlns="urn:activemq:core">
-        <!-- useEpoll means: it will use Netty epoll if you are on a system (Linux) that supports it -->
-        <!-- amqpCredits: The number of credits sent to AMQP producers -->
-        <!-- amqpLowCredits: The server will send the # credits specified at amqpCredits at this low mark -->
-        <!-- amqpDuplicateDetection: If you are not using duplicate detection, set this to false
-                                     as duplicate detection requires applicationProperties to be parsed on the server. -->
-        <!-- amqpMinLargeMessageSize: Determines how many bytes are considered large, so we start using files to hold their data.
-                                      default: 102400, -1 would mean to disable large message control -->
-
-        <!-- Note: If an acceptor needs to be compatible with HornetQ and/or Artemis 1.x clients add
-                   "anycastPrefix=jms.queue.;multicastPrefix=jms.topic." to the acceptor url.
-                   See https://issues.apache.org/jira/browse/ARTEMIS-1644 for more information. -->
-        <!-- Acceptor for every supported protocol -->
-        <acceptor name="artemis">tcp://0.0.0.0:61616?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;amqpMinLargeMessageSize=102400;protocols=CORE,AMQP,STOMP,HORNETQ,MQTT,OPENWIRE;useEpoll=true;amqpCredits=1000;amqpLowCredits=300;amqpDuplicateDetection=true;supportAdvisory=false;suppressInternalManagementObjects=false</acceptor>
-        <!-- AMQP Acceptor.  Listens on default AMQP port for AMQP traffic.-->
-        <acceptor name="amqp">tcp://0.0.0.0:5672?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;protocols=AMQP;useEpoll=true;amqpCredits=1000;amqpLowCredits=300;amqpMinLargeMessageSize=102400;amqpDuplicateDetection=true</acceptor>
-        <!-- STOMP Acceptor. -->
-        <acceptor name="stomp">tcp://0.0.0.0:61613?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;protocols=STOMP;useEpoll=true</acceptor>
-        <!-- HornetQ Compatibility Acceptor.  Enables HornetQ Core and STOMP for legacy HornetQ clients. -->
-        <acceptor name="hornetq">tcp://0.0.0.0:5445?anycastPrefix=jms.queue.;multicastPrefix=jms.topic.;protocols=HORNETQ,STOMP;useEpoll=true</acceptor>
-        <!-- MQTT Acceptor -->
-        <acceptor name="mqtt">tcp://0.0.0.0:1883?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;protocols=MQTT;useEpoll=true</acceptor>
+      {{- range $key, $value := .Values.acceptors }}
+        {{- $configsList := list }}
+        {{- if $value.configs }}
+          {{- range $configKey, $configValue := $value.configs }}
+              {{- $configsList = append $configsList (printf "%s=%s" $configKey (toString $configValue)) }}
+          {{- end }}
+        {{- end }}
+      <acceptor name="{{ $key }}">{{ $value.url }}{{ if $configsList }}?{{ join ";" $configsList }}{{ end }}</acceptor>
+      {{- end }}
     </acceptors>
 
   clustering.xml: |
@@ -239,19 +227,16 @@ data:
     </address-settings>
 
   security-settings.xml: |
-    <security-settings  xmlns="urn:activemq:core">
-      <!--security for example queue-->
-      <security-setting match="#">
-        <permission roles="amq" type="createAddress"/>
-        <permission roles="amq" type="deleteAddress"/>
-        <permission roles="amq" type="createDurableQueue"/>
-        <permission roles="amq" type="deleteDurableQueue"/>
-        <permission roles="amq" type="createNonDurableQueue"/>
-        <permission roles="amq" type="deleteNonDurableQueue"/>
-        <permission roles="amq" type="consume"/>
-        <permission roles="amq" type="send"/>
-        <permission roles="amq" type="browse"/>
+    <security-settings xmlns="urn:activemq:core">
+      {{- range .Values.securitySettings }}
+      <security-setting match="{{ .match }}">
+        {{- range $role, $permissions := .permissions }}
+          {{- range $permission := $permissions }}
+        <permission roles="{{ $role }}" type="{{ $permission }}"/>
+          {{- end }}
+        {{- end }}
       </security-setting>
+      {{- end }}
     </security-settings>
 
   broker-plugins.xml: |
