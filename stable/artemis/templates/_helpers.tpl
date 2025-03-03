@@ -258,6 +258,8 @@ volumes:
       path: broadcast.xml
     - key: broker-plugins.xml
       path: broker-plugins.xml
+    - key: metrics.xml
+      path: metrics.xml
     - key: clustering.xml
       path: clustering.xml
     - key: connectors.xml

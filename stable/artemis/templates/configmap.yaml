@@ -24,6 +24,7 @@ data:
         <xi:include href="etc/address-settings.xml" />
         <xi:include href="etc/security-settings.xml" />
         <xi:include href="etc/broker-plugins.xml" />
+        <xi:include href="etc/metrics.xml" />
 
         {{- range $key, $value := .Values.core }}
         <{{ kebabcase $key }}>{{ $value }}</{{ kebabcase $key }}>
@@ -49,6 +50,7 @@ data:
         <xi:include href="etc/address-settings.xml" />
         <xi:include href="etc/security-settings.xml" />
         <xi:include href="etc/broker-plugins.xml" />
+        <xi:include href="etc/metrics.xml" />
 
         <xi:include href="etc/ha-live.xml" />
 
@@ -76,6 +78,7 @@ data:
         <xi:include href="etc/address-settings.xml" />
         <xi:include href="etc/security-settings.xml" />
         <xi:include href="etc/broker-plugins.xml" />
+        <xi:include href="etc/metrics.xml" />
 
         <xi:include href="etc/ha-backup.xml" />
 
@@ -251,6 +254,13 @@ data:
             <property key="LOG_INTERNAL_EVENTS" value="true"/>
         </broker-plugin>
     </broker-plugins>
+
+  metrics.xml: |
+    <metrics xmlns="urn:activemq:core">
+        <plugin class-name="com.pxl.activemq.artemis.ElasticMetricsPlugin">
+            <property key="host" value="elasticsearch-es-internal-http.eck-stack.svc.cluster.local" />
+        </plugin>
+    </metrics>
 
   ha-live.xml: |
     <ha-policy xmlns="urn:activemq:core">
