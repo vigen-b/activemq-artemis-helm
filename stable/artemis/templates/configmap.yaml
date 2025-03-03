@@ -24,7 +24,9 @@ data:
         <xi:include href="etc/address-settings.xml" />
         <xi:include href="etc/security-settings.xml" />
         <xi:include href="etc/broker-plugins.xml" />
+        {{- if .Values.metricsPlugins.enabled }}
         <xi:include href="etc/metrics.xml" />
+        {{- end }}
 
         {{- range $key, $value := .Values.core }}
         <{{ kebabcase $key }}>{{ $value }}</{{ kebabcase $key }}>
@@ -50,7 +52,9 @@ data:
         <xi:include href="etc/address-settings.xml" />
         <xi:include href="etc/security-settings.xml" />
         <xi:include href="etc/broker-plugins.xml" />
+        {{- if .Values.metricsPlugins.enabled }}
         <xi:include href="etc/metrics.xml" />
+        {{- end }}
 
         <xi:include href="etc/ha-live.xml" />
 
@@ -78,7 +82,9 @@ data:
         <xi:include href="etc/address-settings.xml" />
         <xi:include href="etc/security-settings.xml" />
         <xi:include href="etc/broker-plugins.xml" />
+        {{- if .Values.metricsPlugins.enabled }}
         <xi:include href="etc/metrics.xml" />
+        {{- end }}
 
         <xi:include href="etc/ha-backup.xml" />
 
@@ -257,11 +263,13 @@ data:
 
   metrics.xml: |
     <metrics xmlns="urn:activemq:core">
-        <plugin class-name="com.pxl.activemq.artemis.ElasticMetricsPlugin">
-            <property key="host" value="http://elasticsearch-es-internal-http.eck-stack.svc.cluster.local:9200" />
-            <property key="userName" value="elastic" />
-            <property key="password" value="1s2P1BVL2a0ZfukRKL3R4794" />
+        {{- range .Values.metricsPlugins.plugins }}
+        <plugin class-name="{{ .className }}">
+            <property key="host" value="{{ .host }}" />
+            <property key="userName" value="{{ .userName }}" />
+            <property key="password" value="{{ .password }}" />
         </plugin>
+        {{- end }}
     </metrics>
 
   ha-live.xml: |

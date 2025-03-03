@@ -53,6 +53,14 @@ metrics:
     ## metrics.serviceMonitor.interval Prometheus scraping interval
     interval: 10s
 
+metricsPlugins:
+  enabled: true
+  plugins:
+    - className: com.pxl.activemq.artemis.ElasticMetricsPlugin
+      host: http://elasticsearch-es-internal-http.eck-stack.svc.cluster.local:9200
+      userName: elastic
+      password: elasticPassword
+
 auth:
   clientUser: artemis
   clusterUser: artemis-internal
