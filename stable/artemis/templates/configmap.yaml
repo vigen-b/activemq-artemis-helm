@@ -263,13 +263,15 @@ data:
 
   metrics.xml: |
     <metrics xmlns="urn:activemq:core">
-        {{- range .Values.metricsPlugins.plugins }}
-        <plugin class-name="{{ .className }}">
-            <property key="host" value="{{ .host }}" />
-            <property key="userName" value="{{ .userName }}" />
-            <property key="password" value="{{ .password }}" />
-        </plugin>
+      {{- range .Values.metricsPlugins.plugins }}
+      <plugin class-name="{{ .className }}">
+        {{- range $key, $value := . }}
+        {{- if ne $key "className" }}
+        <property key="{{ $key }}" value="{{ $value }}" />
         {{- end }}
+        {{- end }}
+      </plugin>
+      {{- end }}
     </metrics>
 
   ha-live.xml: |
