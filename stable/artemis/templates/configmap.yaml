@@ -258,7 +258,9 @@ data:
   metrics.xml: |
     <metrics xmlns="urn:activemq:core">
         <plugin class-name="com.pxl.activemq.artemis.ElasticMetricsPlugin">
-            <property key="host" value="elasticsearch-es-internal-http.eck-stack.svc.cluster.local" />
+            <property key="host" value="http://elasticsearch-es-internal-http.eck-stack.svc.cluster.local:9200" />
+            <property key="userName" value="elastic" />
+            <property key="password" value="1s2P1BVL2a0ZfukRKL3R4794" />
         </plugin>
     </metrics>
 
