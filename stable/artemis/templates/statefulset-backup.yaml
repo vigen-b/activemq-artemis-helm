@@ -13,16 +13,11 @@ spec:
   podManagementPolicy: Parallel
   template:
     metadata:
+    {{- if .Values.metrics.enabled }}
       annotations:
-        activemq-artemis/name: {{ include "artemis.fullname" . }}-backup
-        {{- if .Values.caCertBundle.enabled }}
-        trust.cert-manager.io/inject-ca-from: {{ include "artemis.fullname" . }}-ca-bundle
-        {{- end }}
-
-        {{- if .Values.metrics.enabled }}
         prometheus.io/scrape: "true"
         prometheus.io/port: "9404"
-        {{- end }}
+    {{- end }}
       labels:
         {{- include "artemis.labels.backup" . | nindent 8 }}
     spec:

@@ -61,12 +61,6 @@ metricsPlugins:
       userName: elastic
       password: elasticPassword
 
-caCertBundle:
-  enabled: true
-  secretName: ca-key-pair
-  secretKey: ca.crt
-  certBase64: "<YOUR_BASE64_ENCODED_CA_CERT>"
-
 auth:
   clientUser: artemis
   clusterUser: artemis-internal
