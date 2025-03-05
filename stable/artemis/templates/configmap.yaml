@@ -97,6 +97,15 @@ data:
   connectors.xml: |
     <connectors xmlns="urn:activemq:core">
       <connector name="netty">tcp://$EXTERNAL_IP:61616</connector>
+      {{ range $i, $t := until (int .Values.replicaCount) }}
+      {{ range tuple "master" "backup" }}
+        {{- $name := default .Chart.Name .Values.nameOverride -}}
+        {{- $fullname := include "artemis.fullname" . -}}
+        {{- $releaseName := printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+        {{- $releaseNamespace := .Release.Namespace -}}
+        <connector name="{{ $fullname }}-{{ . }}-{{ $i }}">tcp://{{ $fullname }}-{{ . }}-{{ $i }}.{{ $releaseName }}-{{ . }}.{{ $releaseNamespace }}:61616</connector>
+      {{ end }}
+      {{end}}
     </connectors>
 
   acceptors.xml: |
