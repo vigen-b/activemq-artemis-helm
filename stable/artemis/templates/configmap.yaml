@@ -1,3 +1,7 @@
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- $fullname := include "artemis.fullname" . -}}
+{{- $releaseName := printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- $releaseNamespace := .Release.Namespace -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -45,8 +49,8 @@ data:
         <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
         <xi:include href="etc/clustering.xml" />
 
-        <xi:include href="etc/broadcast.xml"/>
-        <xi:include href="etc/discovery.xml"/>
+    <!--    <xi:include href="etc/broadcast.xml"/>-->
+    <!--    <xi:include href="etc/discovery.xml"/>-->
 
         <xi:include href="etc/addresses.xml"/>
         <xi:include href="etc/address-settings.xml" />
@@ -75,8 +79,8 @@ data:
         <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
         <xi:include href="etc/clustering.xml" />
 
-        <xi:include href="etc/broadcast.xml"/>
-        <xi:include href="etc/discovery.xml"/>
+    <!--    <xi:include href="etc/broadcast.xml"/>-->
+    <!--    <xi:include href="etc/discovery.xml"/>-->
 
         <xi:include href="etc/addresses.xml"/>
         <xi:include href="etc/address-settings.xml" />
@@ -97,15 +101,11 @@ data:
   connectors.xml: |
     <connectors xmlns="urn:activemq:core">
       <connector name="netty">tcp://$EXTERNAL_IP:61616</connector>
-      {{- $name := default .Chart.Name .Values.nameOverride -}}
-      {{- $fullname := include "artemis.fullname" . -}}
-      {{- $releaseName := printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-      {{- $releaseNamespace := .Release.Namespace -}}
-      {{ range $i, $t := until (int .Values.replicaCount) }}
-      {{ range tuple "master" "backup" }}
-        <connector name="{{ $fullname }}-{{ . }}-{{ $i }}">tcp://{{ $fullname }}-{{ . }}-{{ $i }}.{{ $releaseName }}-{{ . }}.{{ $releaseNamespace }}:61616</connector>
-      {{ end }}
-      {{end}}
+      {{- range $i, $t := until (int .Values.replicaCount) }}
+      {{- range tuple "" "-backup" }}
+      <connector name="{{ $fullname }}{{ . }}-{{ $i }}">tcp://{{ $fullname }}{{ . }}-{{ $i }}.{{ $releaseName }}{{ . }}.{{ $releaseNamespace }}.svc.cluster.local:61616</connector>
+      {{- end }}
+      {{- end }}
     </connectors>
 
   acceptors.xml: |
@@ -126,10 +126,17 @@ data:
       <cluster-connection name="{{ include "artemis.fullname" . }}">
         <address>{{ .Values.clustering.addresses | join "," }}</address>
         <connector-ref>netty</connector-ref>
-        {{- range $key, $value := (omit .Values.clustering "address" "addresses" "connector-ref" "discovery-group-ref") }}
+        <static-connectors>
+          {{- range $i, $t := until (int .Values.replicaCount) }}
+          {{- range tuple "" "-backup" }}
+          <connector-ref>{{ $fullname }}{{ . }}-{{ $i }}</connector-ref>
+          {{- end }}
+          {{- end }}
+        </static-connectors>
+        {{- range $key, $value := (omit .Values.clustering "address" "addresses" "connector-ref" "discovery-group-ref" "static-connectors") }}
         <{{ kebabcase $key }}>{{ $value }}</{{ kebabcase $key }}>
         {{- end }}
-        <discovery-group-ref discovery-group-name="jgroups-discovery" />
+    <!--    <discovery-group-ref discovery-group-name="jgroups-discovery" />-->
       </cluster-connection>
     </cluster-connections>
 
