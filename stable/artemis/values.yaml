@@ -1,3 +1,7 @@
+nameOverride: ""
+fullnameOverride: ""
+
+# replica count for master brokers
 replicaCount: 1
 
 image:
@@ -12,6 +16,7 @@ initContainerImage:
   tag: 5
   pullPolicy: IfNotPresent
 
+# minimum memory and cpu limits/requests
 resources:
   limits:
     memory: 512Mi
@@ -20,13 +25,16 @@ resources:
     memory: 512Mi
 
 # javaOpts additional java options
+# TODO: probably this will not work with official image
 javaOpts: ""
 
+# enable persistence for HA
 persistence:
   enabled: false
   accessModes:
     - ReadWriteOnce
   storageSize: 8Gi
+  storageClassName: exoscale-sbs
 
 # livenessProbe:
   # httpGet:
@@ -40,6 +48,7 @@ readinessProbe:
   initialDelaySeconds: 5
   periodSeconds: 10
 
+# TODO: this also will not work with official image
 metrics:
   ## metrics.enabled if `true` export prometheus metrics
   enabled: true
@@ -53,23 +62,21 @@ metrics:
     ## metrics.serviceMonitor.interval Prometheus scraping interval
     interval: 10s
 
+# TODO: move to metrics
 metricsPlugins:
-  enabled: true
+  enabled: false
   plugins:
     - className: com.pxl.activemq.artemis.ElasticMetricsPlugin
       host: http://elasticsearch-es-internal-http.eck-stack.svc.cluster.local:9200
       userName: elastic
       password: elasticPassword
 
+# TODO: add this user to the artemis-users.properties
 auth:
   clientUser: artemis
   clusterUser: artemis-internal
-
-jgroups:
-  # jgroups.k8s additional settings for the k8s ping of jgroups. Key, Values are automatically expanded.
-  k8s: {}
-  # jgroups.tcp additional settings for the k8s ping of jgroups. Key, Values are automatically expanded.
-  tcp: {}
+  # if not set, a random password will be generated and stored in a secret
+  existingSecret: ""
 
 ## clustering settings, see: https://activemq.apache.org/components/artemis/documentation/latest/clusters.html for reference.
 ## All key-value pairs are automatically expanded in the cluster-connections xml
@@ -139,10 +146,12 @@ acceptors:
       protocols: "MQTT"
       useEpoll: true
 
+# TODO: check if this is needed
 addresses:
   - name: DLQ
   - name: ExpiryQueue
 
+# TODO: are the default values correct?
 addressSettings:
   - match: "#"
     settings:
@@ -150,6 +159,7 @@ addressSettings:
       expiryAddress: ExpiryQueue
       messageCounterHistoryDayLimit: 10
 
+# TODO: check default permissions
 securitySettings:
   - match: '#'
     permissions:

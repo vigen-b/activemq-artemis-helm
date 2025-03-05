@@ -79,7 +79,6 @@ initContainers:
     - -c
     - |
       cp /tmp/config/*.{xml,xslt} /tmp/etc-override/
-      cp /tmp/jgroups/*.xml /tmp/etc-override/
       chown -R 1001:1001 /tmp/etc-override/
       chown -R 1001:1001 /tmp/data/
   volumeMounts:
@@ -89,8 +88,6 @@ initContainers:
     mountPath: /tmp/etc-override
   - name: data
     mountPath: /tmp/data
-  - name: jgroups
-    mountPath: /tmp/jgroups
 - name: set-pod-ip
   image: {{ .Values.initContainerImage.repository }}:{{ .Values.initContainerImage.tag }}
   imagePullPolicy: {{ .Values.initContainerImage.pullPolicy}}
@@ -152,8 +149,6 @@ containers:
     name: stomp
   - containerPort: 1883
     name: mqtt
-  - containerPort: 7800
-    name: jgroups
   - containerPort: 8888
     name: kubeping
   - containerPort: 8161
@@ -200,8 +195,6 @@ containers:
     mountPath: /var/lib/artemis-instance/data
   - name: etc-override
     mountPath: /var/lib/artemis-instance/etc-override
-{{/*  - name: jgroups*/}}
-{{/*    mountPath: /var/lib/artemis-instance/jgroups*/}}
   - name: artemis-users
     mountPath: /var/lib/artemis-instance/etc-override/artemis-users.properties
     subPath: artemis-users.properties
@@ -234,12 +227,6 @@ volumes:
   emptyDir: {}
 - name: artemis-users
   emptyDir: {}
-- name: jgroups
-  configMap:
-    name: {{ include "artemis.fullname" . }}
-    items:
-    - key: jgroups-discovery.xml
-      path: jgroups-discovery.xml
 {{- if not .Values.persistence.enabled }}
 - name: data
   emptyDir: {}
@@ -254,8 +241,6 @@ volumes:
       path: addresses.xml
     - key: address-settings.xml
       path: address-settings.xml
-    - key: broadcast.xml
-      path: broadcast.xml
     - key: broker-plugins.xml
       path: broker-plugins.xml
     - key: metrics.xml
@@ -264,8 +249,6 @@ volumes:
       path: clustering.xml
     - key: connectors.xml
       path: connectors.xml
-    - key: discovery.xml
-      path: discovery.xml
     - key: security-settings.xml
       path: security-settings.xml
     - key: broker-00.xslt

@@ -14,15 +14,8 @@ data:
     <configuration xmlns="urn:activemq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd" xmlns:xi="http://www.w3.org/2001/XInclude">
       <core xmlns="urn:activemq:core" xsi:schemaLocation="urn:activemq:core ">
 
-
         <xi:include href="etc/connectors.xml"/>
         <xi:include href="etc/acceptors.xml"/>
-
-        <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
-        <xi:include href="etc/clustering.xml" />
-
-        <xi:include href="etc/broadcast.xml"/>
-        <xi:include href="etc/discovery.xml"/>
 
         <xi:include href="etc/addresses.xml"/>
         <xi:include href="etc/address-settings.xml" />
@@ -48,9 +41,6 @@ data:
 
         <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
         <xi:include href="etc/clustering.xml" />
-
-    <!--    <xi:include href="etc/broadcast.xml"/>-->
-    <!--    <xi:include href="etc/discovery.xml"/>-->
 
         <xi:include href="etc/addresses.xml"/>
         <xi:include href="etc/address-settings.xml" />
@@ -79,9 +69,6 @@ data:
         <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
         <xi:include href="etc/clustering.xml" />
 
-    <!--    <xi:include href="etc/broadcast.xml"/>-->
-    <!--    <xi:include href="etc/discovery.xml"/>-->
-
         <xi:include href="etc/addresses.xml"/>
         <xi:include href="etc/address-settings.xml" />
         <xi:include href="etc/security-settings.xml" />
@@ -101,9 +88,11 @@ data:
   connectors.xml: |
     <connectors xmlns="urn:activemq:core">
       <connector name="netty">tcp://$EXTERNAL_IP:61616</connector>
+      {{- if .Values.ha.enabled }}
       {{- range $i, $t := until (int .Values.replicaCount) }}
       {{- range tuple "" "-backup" }}
       <connector name="{{ $fullname }}{{ . }}-{{ $i }}">tcp://{{ $fullname }}{{ . }}-{{ $i }}.{{ $releaseName }}{{ . }}.{{ $releaseNamespace }}.svc.cluster.local:61616</connector>
+      {{- end }}
       {{- end }}
       {{- end }}
     </connectors>
@@ -133,81 +122,11 @@ data:
           {{- end }}
           {{- end }}
         </static-connectors>
-        {{- range $key, $value := (omit .Values.clustering "address" "addresses" "connector-ref" "discovery-group-ref" "static-connectors") }}
+        {{- range $key, $value := (omit .Values.clustering "address" "addresses" "connector-ref" "static-connectors") }}
         <{{ kebabcase $key }}>{{ $value }}</{{ kebabcase $key }}>
         {{- end }}
-    <!--    <discovery-group-ref discovery-group-name="jgroups-discovery" />-->
       </cluster-connection>
     </cluster-connections>
-
-  broadcast.xml: |
-    <broadcast-groups xmlns="urn:activemq:core">
-      <broadcast-group name="jgroups-broadcast">
-        <jgroups-file>jgroups-discovery.xml</jgroups-file>
-        <jgroups-channel>activemq_broadcast_channel</jgroups-channel>
-        <connector-ref>netty</connector-ref>
-      </broadcast-group>
-    </broadcast-groups>
-
-  discovery.xml: |
-    <discovery-groups  xmlns="urn:activemq:core" >
-      <discovery-group name="jgroups-discovery">
-          <jgroups-file>jgroups-discovery.xml</jgroups-file>
-          <jgroups-channel>activemq_broadcast_channel</jgroups-channel>
-          <refresh-timeout>10000</refresh-timeout>
-      </discovery-group>
-    </discovery-groups>
-
-  jgroups-discovery.xml: |
-    <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns="urn:org:jgroups"
-        xsi:schemaLocation="urn:org:jgroups http://www.jgroups.org/schema/jgroups.xsd">
-
-      <TCP
-        external_addr="match-interface:eth0"
-        bind_addr="match-interface:eth0"
-        bind_port="7800"
-        thread_pool.min_threads="{{ .Values.replicaCount }}"
-        {{- range $key, $value := .Values.jgroups.tcp }}
-        {{ $key }}={{ $value | quote }}
-        {{- end }}
-      />
-
-      <org.jgroups.protocols.kubernetes.KUBE_PING
-        masterProtocol="https"
-        namespace="{{ .Release.Namespace }}"
-        labels="app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/name={{ include "artemis.name" . }}"
-        {{- range $key, $value := .Values.jgroups.k8s }}
-        {{ $key }}={{ $value | quote }}
-        {{- end }}
-      />
-
-      <MERGE3 max_interval="30000" min_interval="10000"/>
-      <FD_SOCK start_port="9000"/>
-      <FD_ALL timeout="30000" interval="5000"/>
-      <VERIFY_SUSPECT timeout="1500"/>
-      <BARRIER />
-      <pbcast.NAKACK2
-        xmit_interval="500"
-        xmit_table_num_rows="100"
-        xmit_table_msgs_per_row="2000"
-        xmit_table_max_compaction_time="30000"
-        use_mcast_xmit="false"
-        discard_delivered_msgs="true" />
-      <UNICAST3
-        xmit_table_num_rows="100"
-        xmit_table_msgs_per_row="1000"
-        xmit_table_max_compaction_time="30000"/>
-      <pbcast.STABLE
-        desired_avg_gossip="50000"
-        max_bytes="8m"/>
-      <pbcast.GMS print_local_addr="true" join_timeout="3000"/>
-      <MFC max_credits="2M" min_threshold="0.4"/>
-      <FRAG2 frag_size="60K"/>
-      <pbcast.STATE_TRANSFER/>
-      <CENTRAL_LOCK />
-      <COUNTER/>
-    </config>
 
   addresses.xml: |
     <addresses xmlns="urn:activemq:core">
