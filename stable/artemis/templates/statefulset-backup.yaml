@@ -26,7 +26,5 @@ spec:
             path: broker.xml
           - key: ha-backup.xml
             path: ha-backup.xml
-          - key: connectors.xml
-            path: connectors.xml
   {{- include "artemis.statefulset.volumeclaim" . | nindent 2 }}
 {{- end }}
