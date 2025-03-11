@@ -134,6 +134,20 @@ initContainers:
   volumeMounts:
   - name: artemis-users
     mountPath: /tmp/artemis
+- name: download-dependency-libs
+  image: {{ .Values.initContainerImage.repository }}:{{ .Values.initContainerImage.tag }}
+  imagePullPolicy: {{ .Values.initContainerImage.pullPolicy}}
+  command:
+    - sh
+    - "-c"
+    - |
+      bash <<'EOF'
+      wget -O /tmp/libs/elastic-apm-agent.jar https://repo1.maven.org/maven2/co/elastic/apm/elastic-apm-agent/1.45.0/elastic-apm-agent-1.45.0.jar
+      chown -R 1001:1001 /tmp/libs
+      EOF
+  volumeMounts:
+    - name: libs
+      mountPath: /tmp/libs
 containers:
 - name: activemq-artemis
   image: {{ required "image repository is required" .Values.image.repository }}:{{ required "image tag is required" .Values.image.tag }}
@@ -195,6 +209,8 @@ containers:
   volumeMounts:
   - name: data
     mountPath: /var/lib/artemis-instance/data
+  - name: libs
+    mountPath: /var/lib/artemis-instance/lib
   - name: etc-override
     mountPath: /var/lib/artemis-instance/etc-override
   - name: artemis-users
@@ -228,6 +244,8 @@ volumes:
 - name: etc-override
   emptyDir: {}
 - name: artemis-users
+  emptyDir: {}
+- name: libs
   emptyDir: {}
 {{- if not .Values.persistence.enabled }}
 - name: data
