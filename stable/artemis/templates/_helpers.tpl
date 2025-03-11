@@ -166,10 +166,10 @@ containers:
     {{- toYaml .Values.livenessProbe | nindent 4 }}
   {{- end }}
   env:
-    - name: JAVA_OPTS
-      value: "{{ .Values.javaOpts }}"
+{{/*    - name: JAVA_OPTS*/}}
+{{/*      value: "{{ .Values.javaOpts }}"*/}}
     - name: EXTRA_ARGS
-      value: "-Delastic.apm.environment=dev"
+      value: --java-options={{ .Values.javaOpts }}
     - name: ARTEMIS_USERNAME
       value: {{ .Values.auth.clientUser }}
     - name: ARTEMIS_PASSWORD
