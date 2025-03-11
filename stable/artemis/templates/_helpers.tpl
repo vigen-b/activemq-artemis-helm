@@ -168,6 +168,8 @@ containers:
   env:
     - name: JAVA_OPTS
       value: "{{ .Values.javaOpts }}"
+    - name: EXTRA_ARGS
+      value: "-Delastic.apm.environment=dev"
     - name: ARTEMIS_USERNAME
       value: {{ .Values.auth.clientUser }}
     - name: ARTEMIS_PASSWORD
