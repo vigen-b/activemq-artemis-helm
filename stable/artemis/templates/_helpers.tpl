@@ -183,7 +183,7 @@ containers:
 {{/*    - name: JAVA_OPTS*/}}
 {{/*      value: "{{ .Values.javaOpts }}"*/}}
     - name: EXTRA_ARGS
-      value: --java-options={{ .Values.javaOpts }}
+      value: --java-options="{{ .Values.javaOpts }}"
     - name: ARTEMIS_USERNAME
       value: {{ .Values.auth.clientUser }}
     - name: ARTEMIS_PASSWORD
